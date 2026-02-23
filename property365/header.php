@@ -43,7 +43,7 @@
                 margin-top:18px;
                 width:100%;
             }
-
+  
             /* button styling */
             .btn-save{
                 background:#6c63ff;
