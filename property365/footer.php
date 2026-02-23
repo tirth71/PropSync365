@@ -15,7 +15,7 @@
                         <div class="col-xs-12 col-sm-6 col-md-3 widget--about">
                             <div class="widget--content">
                                 <div class="footer--logo">
-                                    <img src="assets/images/logo/logo-dark2.png" alt="logo">
+                                    <img src="assets/images/logo/newlogo.png" alt="logo">
                                 </div>
                                 <p>B-13, Property Real Estate, Silver Hub, Adajan, Surat</p>
                                 <div class="footer--contact">
@@ -69,7 +69,7 @@
                 <div class="container">
                     <div class="row footer--bar">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <span> 2025 PropSync365, All Rights Reserved.</span>
+                            <span> 2026 PropSync365, All Rights Reserved.</span>
                         </div>
 
                     </div>
