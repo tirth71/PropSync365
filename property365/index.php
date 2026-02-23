@@ -244,7 +244,7 @@
                                                 <?php $str = $result['property_image'];
                                                 $temp = explode(',', $result['property_image']);
                                                 ?>
-                                                <img src="http://localhost/property365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive" height="240" width="363">
+                                                <img src="http://localhost:8081/property365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive" height="240" width="363">
                                                 <?php $q = $result['property_status'];
                                                 if ($q == 0) {
                                                     $status = "Rent";
