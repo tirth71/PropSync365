@@ -32,7 +32,7 @@
         <link rel="stylesheet" href="assets/css/logo1.css">
         <link rel="stylesheet" href="assets/css/form.css">
         
-        <title>Property365</title>
+        <title>PropSync365</title>
 
         <style>
                         /* Change Password button + forgot link alignment */
