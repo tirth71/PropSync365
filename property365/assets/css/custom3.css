@@ -1,0 +1,12 @@
+.bg-overlay {
+    min-height: auto;
+}
+.properties.properties-grid .col-md-12 {
+    width: 55%;
+}
+.footer-widget .widget--links ul li a:hover{
+    color: #6C60FE;
+}
+.logo img{
+    height: 30px;
+}

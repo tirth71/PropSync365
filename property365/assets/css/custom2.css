@@ -1,0 +1,26 @@
+.counry-card {
+  position: relative;
+  margin-top: 16px;
+}
+.counry-card span {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+}
+.counry-card img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.country-heading h4 {
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  line-height: 50px;
+}
+

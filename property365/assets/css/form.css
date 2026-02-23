@@ -1,0 +1,41 @@
+
+form .bg-overlay-dark2::before{
+    background-color: #fff;
+}
+form .form--title{
+    color: #000;
+}
+form label1 {
+    color: #000;
+}
+.properties-filter .select--box label1{
+color: #fff;
+}
+form select, .form-control, textarea.form-control {
+    border-color: #d9d8d8;
+}
+.forget-password{
+    color: #000;
+}
+.property-item .property--img{
+    height: 290px;
+}
+.property-item .property--features{
+    padding: 15px;
+}
+.property-item .property--info1{
+    padding: 10px 25px 5px;
+}
+
+.contact-from-user .bg-overlay-dark2::before{
+    background-color: #fff;
+}
+.contact-from-user{
+    padding: 20px;
+}
+.contact-from-user .form--title{
+    color: #000;
+}
+form .btn--primary:hover{
+    color: #6C60FE;
+}

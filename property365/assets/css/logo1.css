@@ -1,0 +1,21 @@
+.logo img{
+    /* height: 30px; */
+    height: 200px;        
+    width: auto;
+    object-fit: contain;
+    padding: 5px 10px;
+}
+.logo{
+  padding: 0;
+  margin-right: 25px; 
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+.header-fixed .navbar.affix .logo-dark{
+    /* height: 24px; */
+    height: 200px;        
+    width: auto;
+    object-fit: contain;
+    padding: 5px 10px;
+}

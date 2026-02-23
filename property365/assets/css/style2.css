@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  
+  div.popup-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  div.popup-container div.popup{
+    background-color: #f0f0f0;
+    width: 350px;
+    border-radius: 5px;
+    padding: 20px 25px 30px 25px;
+  }
+  
+  div.popup-container div.popup h2{
+    font-size:22px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    color: #30475e;
+  }
+  
+  div.popup-container div.popup h2 button{
+    border: none;
+    background-color: transparent;
+    outline: none;
+    font-size: 18px;
+    font-weight: 550;
+    color: #797775;
+  }
+  
+  div.popup-container div.popup input{
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #30475e;
+    border-radius: 0;
+    padding: 5px 0;
+    font-weight: 550;
+    font-size: 14px;
+    outline: none;
+  }
+  div.popup-container div.popup button.login-btn,div.popup-container div.register button.register-btn,div.popup-container div.forgot button.reset-btn{
+    font-weight: 550;
+    font-style: 15px;
+    color: white;
+    background-color: #30475e;
+    padding: 4px 10px;
+    border: none;
+    outline: none;
+    margin-top: 5px;
+  }
+  
+  div.popup-container div.popup div.forgot-btn
+  {
+    text-align: right;
+  }
+
+  div.popup-container div.popup div.forgot-btn button
+  {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    font-weight: 450;
+    cursor: pointer;
+  }
+  
+  div.popup-container div.register{
+    background-color: #edeef7;
+  }
+  
+  div.popup-container div.register h2{
+    color: #30475e;
+  }
+  
+  div.popup-container div.register input{
+    border-bottom-color: #30475e;
+  }
+  
+  div.popup-container div.register button.register-btn{
+    background-color: #1f2833;
+  }
+  
+  div.user{
+    color: #30475e;
+    background-color: #75cfb8;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+  }
+  div.user a{
+    color: #30475e;
+  }
+
+  #logo-name
+  {
+    /* color: #66fcf1; */
+    color:#66fcf1;
+  }
+
+  #car{
+    margin-left: 500px;
+    width: 700px;
+    margin-top: 50px;
+  }
+
+  
