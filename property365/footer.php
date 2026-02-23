@@ -21,7 +21,7 @@
                                 <div class="footer--contact">
                                     <ul class="list-unstyled mb-0">
                                         <li>+91 98253-45651</li>
-                                        <li>property365offical@gmail.com</li>
+                                        <li>propsync365@gmail.com</li>
                                     </ul>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                 <div class="container">
                     <div class="row footer--bar">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <span> 2025 Property365, All Rights Reserved.</span>
+                            <span> 2025 PropSync365, All Rights Reserved.</span>
                         </div>
 
                     </div>

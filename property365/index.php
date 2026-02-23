@@ -57,7 +57,7 @@
     include("header.php"); ?>
     <section id="heroSearch" class="hero-search mtop-100 pt-0 pb-0 hero-seaction-main">
         <div class="container">
-            <h4>Find your Perfect place with Property<span style="color:#6665ee">365</span> </h4>
+            <h4>Find your Perfect place with PropSync<span style="color:#6665ee">365</span> </h4>
             <p>"Discover premium properties in top locations with expert guidance every step of the way."</p>
         </div>
         <div>
