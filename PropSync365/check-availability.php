@@ -12,20 +12,28 @@
     { 
       //date_default_timezone_set('Asia/Kolkata');
       
-
-      $starting_date =rtrim(str_replace(' ', '-', $_POST['startDate']),'-') ;
-      $ending_date = rtrim(str_replace(' ', '-', $_POST['endDate']),'-');
-
-      $starting_date = date('Y-m-d',strtotime($starting_date));
-      $ending_date = date('Y-m-d',strtotime($ending_date));
-
+$starting_date = DateTime::createFromFormat('d-m-Y', $_POST['startDate'])->format('Y-m-d');
+$ending_date   = DateTime::createFromFormat('d-m-Y', $_POST['endDate'])->format('Y-m-d');
       
+$start = new DateTime($starting_date);
+$end   = new DateTime($ending_date);
+$days  = $start->diff($end)->days;
 
+if($days < 30){
+    echo "<script>alert('Minimum rent period is 1 month (30 days)');window.history.back();</script>";
+    exit();
+}
       
-      $query="SELECT * from tbl_rent where property_id = '$property_id' AND  ( '$starting_date'  between starting_date and  ending_date) OR ( '$ending_date' between starting_date AND  ending_date) ";
-      $res=mysqli_query($con,$query);
+     $query = "SELECT * FROM tbl_rent 
+WHERE property_id='$property_id'
+AND (
+    ('$starting_date' <= ending_date)
+    AND
+    ('$ending_date' >= starting_date)
+)";
+$res=mysqli_query($con,$query);
     
-      $result_cnt=mysqli_affected_rows($con);
+    $result_cnt = mysqli_num_rows($res);
       
 
       if($result_cnt>0)
@@ -67,8 +75,9 @@ include('header.php');
                       <div class="form-box1" >
                          <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                <h4 class="form--title">Payment Details:</h4>
-                            </div>
+                                <h4 class="form--title">Booking Details:</h4>
+                            </div><br>
+                            <h6 style="color:red; padding:20px">     Select Minimum 30 Days</h6>
                             <?php 
                              if (isset($error)) {
                                 ?>
@@ -154,7 +163,7 @@ include('header.php');
    <!--  <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
      <!--  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script> -->
-    <script>
+    <!-- <script>
       $("#startDate").datepicker({
         enableTime: false,
         minDate: 0,
@@ -174,4 +183,30 @@ include('header.php');
   });
   
 </script>
-    
+     -->
+
+
+     <script>
+$(function(){
+
+    $("#startDate").datepicker({
+        dateFormat: "dd-mm-yy",
+        minDate: 0,
+        onSelect: function(selectedDate){
+
+            var start = $(this).datepicker('getDate');
+
+            // add 30 days automatically
+            start.setDate(start.getDate() + 30);
+
+            $("#endDate").datepicker("option", "minDate", start);
+            $("#endDate").datepicker("setDate", start);
+        }
+    });
+
+    $("#endDate").datepicker({
+        dateFormat: "dd-mm-yy"
+    });
+
+});
+</script>

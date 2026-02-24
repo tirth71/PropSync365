@@ -67,10 +67,13 @@
                     <td><?php echo $row["property_name"]; ?></td>
                     <?php
                       $getUser=$obj->myQuery("SELECT * FROM tbl_user WHERE user_id = '{$row["buyer_id"]}' ");
-                      
-                      $result = $getUser->fetch_assoc();
+                      if($getUser->num_rows > 0){
+    $result = $getUser->fetch_assoc();
+    echo "<td>".$result["user_name"]."</td>";
+}else{
+    echo "<td>N/A</td>";
+}
                     ?>
-                    <td><?php echo $result["user_name"]; ?></td>
                     <?php
                       $getUser1=$obj->myQuery("SELECT * FROM tbl_user WHERE user_id = '{$row["user_id"]}' ");
                       
@@ -89,13 +92,19 @@
                     <td><?php echo $sataus1; ?></td>
                     <?php
                    $getdate = $obj->myQuery("SELECT * FROM tbl_rent WHERE property_id = '{$row["property_id"]}'");
-                   $rental = $getdate->fetch_assoc();
-                   
+
+if($getdate->num_rows > 0){
+    $rental = $getdate->fetch_assoc();
+    $start_date = $rental["starting_date"];
+    $end_date   = $rental["ending_date"];
+}else{
+    $start_date = "N/A";
+    $end_date   = "N/A";
+}
                      
                     ?>
-                    <td><?php echo isset($rental["starting_date"]) ? $rental["starting_date"] : 'N/A'; ?></td>
-<td><?php echo isset($rental["ending_date"]) ? $rental["ending_date"] : 'N/A'; ?></td>
-
+                    <td><?php echo $start_date; ?></td>
+<td><?php echo $end_date; ?></td>
 
                     <td><?php echo $row["property_price"]; ?></td>
                     <td><?php echo $row["deposite"]; ?></td>
