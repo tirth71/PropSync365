@@ -11,7 +11,7 @@ if(isset($_GET['id']))
     $temp = array_filter($temp);
     
     foreach($temp as $image){
-        $images="http://localhost/property365/img_upload/".$image;
+        $images="http://localhost/PropSync365/img_upload/".$image;
         if(file_exists($images)){
 			// echo "file exits";
 			unlink($images);

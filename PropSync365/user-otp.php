@@ -9,7 +9,7 @@ if($email == false){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Code Verification | Property365</title>
+    <title>Code Verification | PropSync365</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
         * {

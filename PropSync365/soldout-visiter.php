@@ -49,7 +49,7 @@ include("header.php");?>
                                                 <?php $str=$result['property_image'];
                                                 $temp = explode(',', $result['property_image']);
                                                 ?>
-                                                <img src="http://localhost:8081/property365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive">
+                                                <img src="http://localhost:8081/PropSync365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive">
                                                 <?php $q = $result['property_status'];
                                                 if($q == 0){
                                                     $status = "Rent";

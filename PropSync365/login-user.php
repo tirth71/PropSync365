@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Login | Property365</title>
+  <title>Login | PropSync365</title>
   <style>
     * {
       margin: 0;
@@ -167,7 +167,7 @@
       <div class="left-box">
         <h2>Welcome to</h2>
         <a class="a" href="index.php">
-          <h1 class="logo">Property<span>365</span></h1>
+          <h1 class="logo">PropSync<span>365</span></h1>
         </a>
         <p>Login with your email and password</p>
 
@@ -206,7 +206,7 @@
 
       <div class="right-box">
         <div class="overlay">
-          <h1>Property365</h1>
+          <h1>PropSync365</h1>
           <p>Your trusted platform for buying, selling, and renting properties—made easy and secure.</p>
         </div>
       </div>

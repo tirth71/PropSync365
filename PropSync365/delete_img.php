@@ -32,7 +32,7 @@ print_r($temp);
 
 $temp = implode(',', $temp);
 
-$filedel="http://localhost/property365/img_upload/".$img_id;
+$filedel="http://localhost/PropSync365/img_upload/".$img_id;
 
 if(file_exists($filedel)){
 	// echo "file exits";

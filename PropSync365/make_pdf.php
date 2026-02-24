@@ -114,7 +114,7 @@ $result = mysqli_fetch_assoc($row);
                 <strong>Status:</strong> <?php echo ($result['property_status'] == 1) ? 'Sell' : 'Rent'; ?>
             </td>
             <td class="text-right">
-                <img src="http://localhost/property365/img_upload/<?php echo $result['property_image']; ?>" class="property-img">
+                <img src="http://localhost/PropSync365/img_upload/<?php echo $result['property_image']; ?>" class="property-img">
             </td>
         </tr>
     </table>

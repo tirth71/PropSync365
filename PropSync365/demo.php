@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login | Property365</title>
+  <title>Login | PropSync365</title>
   <style>
     * {
       margin: 0;

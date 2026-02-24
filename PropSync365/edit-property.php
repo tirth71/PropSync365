@@ -26,7 +26,7 @@
       $city=$_REQUEST['city'];
       $status=$_REQUEST['status'];
       // $deposit=$_REQUEST['deposit'];
-      $serverPath=$_SERVER["DOCUMENT_ROOT"]."/property365";
+      $serverPath=$_SERVER["DOCUMENT_ROOT"]."/PropSync365";
       if (!empty(array_filter($_FILES['path']['name'])))
         { 
           $totalFiles=count($_FILES['path']['name']);
@@ -84,7 +84,7 @@
             { 
               $fileName="";
               $fileName.=date('Y-m-d-h-i-s')."-{$i}.{$ext}";
-              $uploadPath=$serverPath."http://localhost/property365/img_upload/".$fileName;
+              $uploadPath=$serverPath."http://localhost/PropSync365/img_upload/".$fileName;
 
               move_uploaded_file($_FILES['path']['tmp_name'][$i],$uploadPath);
 
@@ -239,7 +239,7 @@
                                            // print_r($temp[0]);
                                           $temp = array_filter($temp);
                                           foreach($temp as $image){
-                                              $images[]="http://localhost/property365/img_upload//".trim( str_replace( array('[',']') ,"" ,$image ) );
+                                              $images[]="http://localhost/PropSync365/img_upload//".trim( str_replace( array('[',']') ,"" ,$image ) );
                                           }  
                                           if(@$images)
                                           {

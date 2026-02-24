@@ -181,7 +181,7 @@ include('header.php');
                 "key": "rzp_test_xxhEgawJNwXoLj", // Replace with your key
                 "amount": <?php echo $amount * 100; ?>,
                 "currency": "INR",
-                "name": "PROPERTY365",
+                "name": "PropSync365",
                 "description": "Rent Payment",
                 "handler": function (response) {
                     $.post("razorpay_success.php", {

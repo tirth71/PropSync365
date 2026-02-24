@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Signup | Property365</title>
+  <title>Signup | PropSync365</title>
   <style>
     * {
       margin: 0;
@@ -144,7 +144,7 @@
       <!-- Left side: Image and overlay content -->
       <div class="left-box">
         <div class="overlay">
-          <h1>Join Property365</h1>
+          <h1>Join PropSync365</h1>
           <p>Explore properties, connect with owners, and find your perfect space with ease and trust.</p>
         </div>
       </div>

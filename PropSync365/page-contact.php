@@ -198,7 +198,7 @@ include("config.php");
                 <div class="icon"><img src="https://img.icons8.com/ios-filled/50/marker.png"/></div>
                 <div>
                     <h3 id="h3">Address</h3>
-                    <p>B-13, Property365<br>Silver Hub, Adajan,<br>Surat</p>
+                    <p>B-13, PropSync365<br>Silver Hub, Adajan,<br>Surat</p>
                 </div>
             </div>
             <div class="info2">
@@ -212,7 +212,7 @@ include("config.php");
                 <div class="icon"><img src="https://img.icons8.com/ios-filled/50/email.png"/></div>
                 <div>
                     <h3 id="h3">Email</h3>
-                    <p>property365offical@gmail.com</p>
+                    <p>propsync365@gmail.com</p>
                 </div>
             </div>
         </div>

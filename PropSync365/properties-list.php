@@ -216,7 +216,7 @@ include("config.php");
                                                 <?php $str=$result['property_image'];
                                                     $temp = explode(',', $result['property_image']);
                                                     ?>
-                                            <img src="http://localhost:8081/property365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive" style="max-width: 112%;">
+                                            <img src="http://localhost:8081/PropSync365/img_upload/<?php echo $temp[0]; ?>" alt="property image" class="img-responsive" style="max-width: 112%;">
             								</a>
                                             <?php $q = $result['property_status'];
                                                 if($q == 0){

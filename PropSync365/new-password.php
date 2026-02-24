@@ -9,7 +9,7 @@ if($email == false){
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>New Password | Property365</title>
+  <title>New Password | PropSync365</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <style>
     * {
@@ -135,11 +135,11 @@ if($email == false){
   <div class="container">
     <div class="form-box">
 
-      <!-- Left: Property365 Info -->
+      <!-- Left: PropSync365 Info -->
       <div class="left-box">
         <div class="overlay">
           <h1>Reset Your Password</h1>
-          <p>Securely set a new password and get back to exploring Property365 hassle-free.</p>
+          <p>Securely set a new password and get back to exploring PropSync365 hassle-free.</p>
         </div>
       </div>
 

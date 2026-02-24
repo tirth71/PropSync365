@@ -159,7 +159,7 @@ include("header.php");
                                                 $temp = array_filter($temp);
                                                 foreach($temp as $image)
                                                 {
-                                                  $images[]="http://localhost:8081/property365/img_upload/".trim( str_replace( array('[',']') ,"" ,$image ) );
+                                                  $images[]="http://localhost:8081/PropSync365/img_upload/".trim( str_replace( array('[',']') ,"" ,$image ) );
                                                   
                                                 } 
                                                 $cntimg = count($images);        
