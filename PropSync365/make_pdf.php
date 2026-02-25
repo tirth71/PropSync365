@@ -18,9 +18,18 @@ $row = mysqli_query($con, $q);
 $result = mysqli_fetch_assoc($row);
 
 /* ---------------- PROPERTY IMAGE ---------------- */
-$imgs = explode(',', $result['property_image']);
-$main_img = $imgs[0];
+/* ----------- PROPERTY IMAGE FIX ----------- */
 
+// split images
+$imgs = explode(',', $result['property_image']);
+
+// remove spaces
+$main_img = trim($imgs[0]);
+
+// default image if empty
+if($main_img == "" || !file_exists("img_upload/".$main_img)){
+    $main_img = "noimage.png";
+}
 /* ---------------- BASE64 LOGO ---------------- */
 $logo_path = "assets/images/logo.png";
 $logo_base64 = "";
@@ -31,15 +40,21 @@ if(file_exists($logo_path)){
 }
 
 /* ---------------- BASE64 PROPERTY IMAGE ---------------- */
+/* ----------- BASE64 PROPERTY IMAGE ----------- */
+
 $property_base64 = "";
-$img_path = "img_upload/" . $main_img;
+
+$img_path = __DIR__ . "/img_upload/" . $main_img;
 
 if(file_exists($img_path)){
-    $img_type = pathinfo($img_path, PATHINFO_EXTENSION);
-    $img_data = file_get_contents($img_path);
-    $property_base64 = 'data:image/' . $img_type . ';base64,' . base64_encode($img_data);
-}
 
+    $image_info = getimagesize($img_path);
+    $mime = $image_info['mime'];
+
+    $img_data = file_get_contents($img_path);
+
+    $property_base64 = 'data:' . $mime . ';base64,' . base64_encode($img_data);
+}
 /* ---------------- AMOUNT CALCULATION ---------------- */
 // 0 = Rent  |  1 = Sale
 if($result['property_status'] == 0){
