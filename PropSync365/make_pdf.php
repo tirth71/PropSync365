@@ -1,162 +1,273 @@
 <?php
 include('config.php');
 
-// Get parameters from URL
 $id = $_GET['id'];
-$type = isset($_GET['type']) ? ucfirst($_GET['type']) : 'Unknown';
-$payment_id = rand(1000,9999);
+$type = isset($_GET['type']) ? ucfirst($_GET['type']) : 'Property';
+$payment_id = rand(100000,999999);
 
+/* ---------------- FETCH PROPERTY + OWNER ---------------- */
 $q = "SELECT p.*, 
              u.user_name AS owner_name, 
              u.user_email AS owner_email, 
              u.user_mobile AS owner_phone 
       FROM tbl_property p
       LEFT JOIN tbl_user u ON p.user_id = u.user_id 
-      WHERE p.property_id = $id AND u.user_type = 1";
+      WHERE p.property_id = $id";
 
 $row = mysqli_query($con, $q);
 $result = mysqli_fetch_assoc($row);
+
+/* ---------------- PROPERTY IMAGE ---------------- */
+$imgs = explode(',', $result['property_image']);
+$main_img = $imgs[0];
+
+/* ---------------- BASE64 LOGO ---------------- */
+$logo_path = "assets/images/logo.png";
+$logo_base64 = "";
+if(file_exists($logo_path)){
+    $logo_type = pathinfo($logo_path, PATHINFO_EXTENSION);
+    $logo_data = file_get_contents($logo_path);
+    $logo_base64 = 'data:image/' . $logo_type . ';base64,' . base64_encode($logo_data);
+}
+
+/* ---------------- BASE64 PROPERTY IMAGE ---------------- */
+$property_base64 = "";
+$img_path = "img_upload/" . $main_img;
+
+if(file_exists($img_path)){
+    $img_type = pathinfo($img_path, PATHINFO_EXTENSION);
+    $img_data = file_get_contents($img_path);
+    $property_base64 = 'data:image/' . $img_type . ';base64,' . base64_encode($img_data);
+}
+
+/* ---------------- AMOUNT CALCULATION ---------------- */
+// 0 = Rent  |  1 = Sale
+if($result['property_status'] == 0){
+    // Rent property → Rent + Deposit
+    $amount_paid = $result['property_price'] + $result['deposite'];
+}else{
+    // Sale property → Only token/deposit
+    $amount_paid = $result['deposite'];
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Invoice - Property <?php echo $type; ?></title>
-    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            padding: 20px;
-        }
+<meta charset="UTF-8">
+<title>PropSync365 Invoice</title>
 
-        .invoice-box {
-            background: white;
-            max-width: 800px;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0,0,0,.15);
-            color: #555;
-        }
+<script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 
-        .title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+<style>
+body{
+    background:#eceff3;
+    font-family:'Segoe UI', Arial, sans-serif;
+}
 
-        table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-            border-collapse: collapse;
-        }
+.invoice-box{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    padding:35px;
+    border-radius:8px;
+    box-shadow:0 0 15px rgba(0,0,0,0.15);
+}
 
-        table td {
-            padding: 8px;
-            vertical-align: top;
-        }
+.invoice-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:3px solid #6c63ff;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
 
-        table tr.heading td {
-            background: #eee;
-            font-weight: bold;
-            border-bottom: 1px solid #ddd;
-        }
+.company-details{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-        .property-img {
-            max-width: 200px;
-            border-radius: 5px;
-        }
+.logo{
+    width:85px;
+}
 
-        .section-title {
-            margin-top: 20px;
-            font-weight: bold;
-            background: #f5f5f5;
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-        }
+.company-name{
+    font-size:26px;
+    font-weight:700;
+    color:#6c63ff;
+}
 
-        .text-right {
-            text-align: right;
-        }
+.invoice-title{
+    font-size:24px;
+    font-weight:bold;
+}
 
-    </style>
+.section-title{
+    font-weight:bold;
+    background:#f3f4f8;
+    padding:8px 12px;
+    border-left:4px solid #6c63ff;
+    margin-top:25px;
+    margin-bottom:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#6c63ff;
+    color:white;
+    padding:10px;
+    text-align:left;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+.property-img{
+    width:180px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.total-box{
+    margin-top:20px;
+    width:320px;
+    float:right;
+    border:1px solid #ddd;
+}
+
+.total-box td{
+    padding:12px;
+}
+
+.grand-total{
+    font-size:20px;
+    font-weight:bold;
+    color:#6c63ff;
+}
+
+.footer-note{
+    margin-top:70px;
+    font-size:13px;
+    color:#777;
+    border-top:1px dashed #ccc;
+    padding-top:15px;
+}
+</style>
 </head>
+
 <body>
+
 <div class="invoice-box" id="invoice">
-    <div class="title">Property  Invoice</div>
+
+    <!-- HEADER -->
+    <div class="invoice-header">
+
+        <div class="company-details">
+            <img src="<?php echo $logo_base64; ?>" class="logo">
+
+            <div>
+                <div class="company-name">PropSync365</div>
+                <div>Real Estate Management System</div>
+                <div>Email: support@propsync365.com</div>
+                <div>Phone: +91 98765 43210</div>
+            </div>
+        </div>
+
+        <div style="text-align:right;">
+            <div class="invoice-title">INVOICE</div>
+            <strong>Invoice #:</strong> <?php echo 'INV'.str_pad($result['property_id'],5,'0',STR_PAD_LEFT); ?><br>
+            <strong>Date:</strong> <?php echo date("d M Y"); ?><br>
+            <strong>Payment ID:</strong> <?php echo $payment_id; ?>
+        </div>
+
+    </div>
+
+    <!-- PROPERTY INFO -->
+    <div class="section-title">Property Information</div>
 
     <table>
         <tr>
-            <td>
-                <strong>Invoice Date:</strong> <?php echo date("Y-m-d H:i:s"); ?><br>
-                <strong>Payment ID:</strong> <?php echo $payment_id; ?><br>
-                <!-- <strong>Transaction Type:</strong> <?php echo $type; ?> -->
+            <td width="65%">
+                <b>Name:</b> <?php echo $result['property_name']; ?><br>
+                <b>Type:</b> <?php echo $result['property_type']; ?><br>
+                <b>Address:</b> <?php echo $result['property_address']; ?><br>
+                <?php echo $result['property_city']; ?>, <?php echo $result['property_state']; ?><br>
+                <b>Area:</b> <?php echo $result['property_sqfeet']; ?> sq.ft<br>
+                <b>Status:</b> <?php echo ($result['property_status']==1)?'Sale':'Rent'; ?>
             </td>
-            <td class="text-right">
-                <strong>Invoice #</strong> <?php echo 'INV' . str_pad($result['property_id'], 5, '0', STR_PAD_LEFT); ?><br>
-                <strong>Amount Paid:</strong> ₹<?php echo number_format($result['deposite']); ?>
+
+            <td align="right">
+                <?php if($property_base64!=""){ ?>
+                    <img src="<?php echo $property_base64; ?>" class="property-img">
+                <?php } ?>
             </td>
         </tr>
     </table>
 
-    <div class="section-title">Property Details</div>
-    <table>
-        <tr>
-            <td>
-                <strong>Name:</strong> <?php echo $result['property_name']; ?><br>
-                <strong>Type:</strong> <?php echo $result['property_type']; ?><br>
-                <strong>Address:</strong> <?php echo $result['property_address']; ?>, <?php echo $result['property_city']; ?>, <?php echo $result['property_state']; ?><br>
-                <strong>Area:</strong> <?php echo $result['property_sqfeet']; ?> sq.ft<br>
-                <strong>Status:</strong> <?php echo ($result['property_status'] == 1) ? 'Sell' : 'Rent'; ?>
-            </td>
-            <td class="text-right">
-                <img src="http://localhost/PropSync365/img_upload/<?php echo $result['property_image']; ?>" class="property-img">
-            </td>
-        </tr>
-    </table>
-
+    <!-- OWNER -->
     <div class="section-title">Owner Details</div>
+
     <table>
         <tr>
             <td>
-                <strong>Name:</strong> <?php echo $result['owner_name'] ?? 'N/A'; ?><br>
-                <strong>Email:</strong> <?php echo $result['owner_email'] ?? 'N/A'; ?><br>
-                <strong>Phone:</strong> <?php echo $result['owner_phone'] ?? 'N/A'; ?>
+                <b>Name:</b> <?php echo $result['owner_name']; ?><br>
+                <b>Email:</b> <?php echo $result['owner_email']; ?><br>
+                <b>Mobile:</b> <?php echo $result['owner_phone']; ?>
             </td>
         </tr>
     </table>
 
-    <div class="section-title">Payment Summary</div>
+    <!-- PAYMENT -->
+    <div class="section-title">Payment Details</div>
+
     <table>
         <tr>
-            <td><strong>Amount:</strong></td>
+            <th>Description</th>
+            <th width="180">Amount (₹)</th>
+        </tr>
+
+        <tr>
+            <td>Monthly Rent / Property Price</td>
             <td>₹<?php echo number_format($result['property_price']); ?></td>
         </tr>
-        <!-- <tr>
-            <td><strong>Transaction Type:</strong></td>
-            <td><?php echo $type; ?></td>
-        </tr> -->
+
         <tr>
-            <td><strong>Payment ID:</strong></td>
-            <td><?php echo $payment_id; ?></td>
-        </tr>
-        <tr>
-            <td><strong>Transaction Date:</strong></td>
-            <td><?php echo date("Y-m-d H:i:s"); ?></td>
+            <td>Security Deposit</td>
+            <td>₹<?php echo number_format($result['deposite']); ?></td>
         </tr>
     </table>
+
+    <table class="total-box">
+        <tr>
+            <td><b>Total Amount Paid</b></td>
+            <td class="grand-total">₹<?php echo number_format($amount_paid); ?></td>
+        </tr>
+    </table>
+
+    <div style="clear:both;"></div>
+
+    <div class="footer-note">
+        This is a computer-generated invoice and does not require a signature.<br>
+        Thank you for choosing <b>PropSync365</b>.<br>
+        For support contact: support@propsync365.com
+    </div>
+
 </div>
 
 <script>
-    // Auto-download PDF after load
-    window.onload = function () {
-        const element = document.getElementById('invoice');
-        html2pdf().from(element).save('Invoice_<?php echo $type; ?>_<?php echo $result["property_id"]; ?>.pdf');
-    };
+window.onload = function () {
+    const element = document.getElementById('invoice');
+    html2pdf().from(element).save('PropSync365_Invoice_<?php echo $result["property_id"]; ?>.pdf');
+};
 </script>
+
 </body>
 </html>
