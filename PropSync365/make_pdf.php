@@ -272,9 +272,7 @@ td{
     <div style="clear:both;"></div>
 
     <div class="footer-note">
-        This is a computer-generated invoice and does not require a signature.<br>
-        Thank you for choosing <b>PropSync365</b>.<br>
-        For support contact: support@propsync365.com
+        
     </div>
 
 </div>
