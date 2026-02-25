@@ -72,6 +72,8 @@ if($result['property_status'] == 0){
 <meta charset="UTF-8">
 <title>PropSync365 Invoice</title>
 
+<link href="assets/images/logo/newlogo.png" rel="icon">
+
 <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 
 <style>
