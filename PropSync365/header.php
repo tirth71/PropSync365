@@ -16,7 +16,7 @@
         <meta name="author" content="zytheme" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="description" content="Real Estate html5 template">
-        <link href="assets/images/favicon/favicon.png" rel="icon">
+        <link href="assets/images/logo/newlogo.png" rel="icon">
 
     
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i%7CPoppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
