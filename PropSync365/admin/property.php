@@ -1,207 +1,198 @@
 <?php 
+include('header.php');
+include('../config.php');
 
-  include('header.php'); 
+/* load mail function */
+require_once __DIR__ . '/../mail_property.php';
 
-  $propertyData = $obj->myQuery("SELECT * FROM `tbl_property` where live_status=0 || live_status=1 || live_status=3");
-  
 
-  if(isset($_GET['did']))
-  {
-    $data['property_id']=$_GET['did'];
-    $obj->myDelete('tbl_property',$data);
-    $obj->redirect('property.php');
-  }
+/* ---------------- DELETE PROPERTY ---------------- */
+if(isset($_GET['did']))
+{
+    $id = $_GET['did'];
+    mysqli_query($con,"DELETE FROM tbl_property WHERE property_id=$id");
+    echo "<script>alert('Property Deleted');window.location='property.php';</script>";
+}
 
+
+/* ---------------- APPROVE PROPERTY ---------------- */
+if(isset($_GET['approve']))
+{
+    $id=$_GET['approve'];
+
+    /* get owner info */
+    $q=mysqli_query($con,"
+    SELECT tbl_property.property_name,tbl_user.user_name,tbl_user.user_email
+    FROM tbl_property
+    JOIN tbl_user ON tbl_property.user_id=tbl_user.user_id
+    WHERE property_id=$id
+    ");
+    $data=mysqli_fetch_assoc($q);
+
+    /* update status */
+    mysqli_query($con,"UPDATE tbl_property SET approval_status=1 WHERE property_id=$id");
+
+    /* email */
+    $subject="Your Property Approved - PropSync365";
+
+    $message="
+    <h2>Hello {$data['user_name']},</h2>
+    <p>Great News 🎉</p>
+    <p>Your property <b>{$data['property_name']}</b> has been 
+    <b style='color:green;'>APPROVED</b> by our admin team.</p>
+    <p>Your listing is now LIVE on the website.</p>
+    <br>
+    Thank you for using <b>PropSync365</b>.
+    <br><br>
+    <b>PropSync365 Team</b>
+    ";
+
+    sendPropertyStatusMail($data['user_email'],$data['user_name'],$subject,$message);
+
+    echo "<script>alert('Property Approved & Email Sent');window.location='property.php';</script>";
+}
+
+
+/* ---------------- REJECT PROPERTY ---------------- */
+if(isset($_GET['reject']))
+{
+    $id=$_GET['reject'];
+
+    $q=mysqli_query($con,"
+    SELECT tbl_property.property_name,tbl_user.user_name,tbl_user.user_email
+    FROM tbl_property
+    JOIN tbl_user ON tbl_property.user_id=tbl_user.user_id
+    WHERE property_id=$id
+    ");
+    $data=mysqli_fetch_assoc($q);
+
+    mysqli_query($con,"UPDATE tbl_property SET approval_status=2 WHERE property_id=$id");
+
+    $subject="Property Rejected - PropSync365";
+
+    $message="
+    <h2>Hello {$data['user_name']},</h2>
+    <p>Your property <b>{$data['property_name']}</b> has been 
+    <b style='color:red;'>REJECTED</b>.</p>
+    <p>Reason: Invalid details.</p>
+    <p>Please edit and submit again.</p>
+    <br>
+    <b>PropSync365 Support Team</b>
+    ";
+
+    sendPropertyStatusMail($data['user_email'],$data['user_name'],$subject,$message);
+
+    echo "<script>alert('Property Rejected & Email Sent');window.location='property.php';</script>";
+}
+
+
+/* ---------------- FETCH ALL PROPERTIES ---------------- */
+$propertyData=mysqli_query($con,"SELECT * FROM tbl_property ORDER BY property_id DESC");
 ?>
-<!-- Content Wrapper. Contains page content -->
+
+
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Property List</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Property</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
 
-  <!-- Main content -->
-  <section class="content">
-    <div class="card">
-      <!-- <div class="card-header">
-        <a href="property_add.php" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add Property</a>
-      </div> -->
-      <!-- /.card-header -->
-      <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Title</th>
-              <th>Owner</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Live Status</th>
-              <th>Aproved/Pending</th>
-              
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php 
-              $no=0;
-              while ($row = $propertyData->fetch_assoc()) {
-                $no++;
-                ?>
-                  <tr>
-                    <th><?php echo $no; ?></th>
-                    <td><?php echo $row["property_name"]; ?></td>
-                    <?php
-                      $getUser=$obj->myQuery("SELECT * FROM tbl_user WHERE user_id = '{$row["user_id"]}'");
-                      
-                      $result = $getUser->fetch_assoc();
-                    ?>
-                    <td><?php echo $result["user_name"]; ?></td>
+<section class="content">
+<div class="card">
+<div class="card-body">
 
-                    <td><?php echo $row["property_type"]; ?></td>
-                    <td><?php echo $row["property_price"]; ?></td>
-                    <?php 
-                    $status = $row["property_status"];
-                    if($status == 0){
-                        $sataus1 = "Rent";
-                    }else{
-                        $sataus1 = "Sale";
-                    } ?>
-                    <td><?php echo $sataus1; ?></td>
-                    <?php if($row['live_status'] == '0') 
-                          {
-                            $status= "<i class='fa fa-toggle-off' onClick='active_deactive(".$row['property_id'].",1)' style='font-size:40px;'></i>";
-                          } else if($row['live_status'] == '3')
-                          {
-                            $status= "<i class='fa fa-toggle-on'  onClick='active_deactive(".$row['property_id'].",4)' style='font-size:40px;color:green;'></i>";
-                          } else if($row['live_status'] == '4')
-                          {
-                            $status= "<i class='fa fa-toggle-off' onClick='active_deactive(".$row['property_id'].",3)' style='font-size:40px;'></i>";
-                            // $Status= "you not deactivate bcz this booked ";
-                          } else { 
-                            $status= "<i class='fa fa-toggle-on'  onClick='active_deactive(".$row['property_id'].",0)' style='font-size:40px;color:green;'></i>";}
-                   ?>
-                    
-                    <td id="status_change<?php echo $row['property_id'];?>"><?php echo $status; ?></td>
-                    <?php
-                      $live_status = $row["live_status"];
-                      if($live_status == 0){
-                        $state = "pending";
-                      }else if($live_status == 1){
-                        $state = "Approved";
-                      }else if($live_status == 3){
-                        $state = "Book For Rent"; 
-                      }else{
-                        $state = "Sold";
-                      }
-                     ?>
-                    <td id="state_change<?php echo $row['property_id'];?>"><?php echo $state; ?></td>
-                    <th>
-                      <div class="btn-group btn-group-sm">
-                        
-                        <a onclick="return confirm('Are you sure you want to delete Property?');" href="property.php?did=<?php echo $row['property_id']; ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                      </div>
-                    </th>
-                  </tr>
-                <?php
-              }
-             ?>
-          </tbody>
-        </table>
-      </div>
-      <!-- /.card-body -->
-    </div>
-  </section>
-  <!-- /.content -->
+<table id="example1" class="table table-bordered table-striped">
+<thead>
+<tr>
+<th>No</th>
+<th>Title</th>
+<th>Owner</th>
+<th>Type</th>
+<th>Price</th>
+<th>Rent/Sale</th>
+<th>Property Document</th>
+<th>Status</th>
+<th>Action</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+
+<?php 
+$no=0;
+while($row=mysqli_fetch_assoc($propertyData)){
+$no++;
+?>
+
+<tr>
+
+<td><?php echo $no; ?></td>
+<td><?php echo $row['property_name']; ?></td>
+
+<?php
+$u=mysqli_query($con,"SELECT user_name FROM tbl_user WHERE user_id='{$row['user_id']}'");
+$user=mysqli_fetch_assoc($u);
+?>
+<td><?php echo $user['user_name']; ?></td>
+
+<td><?php echo $row['property_type']; ?></td>
+<td>₹<?php echo number_format($row['property_price']); ?></td>
+
+<td>
+<?php echo ($row['property_status']==0)?"Rent":"Sale"; ?>
+</td>
+
+
+<td>
+<?php
+if($row['property_document'] != ""){
+    echo "<a href='../property_docs/".$row['property_document']."' target='_blank' class='btn btn-info btn-sm'>View Proof</a>";
+}
+else{
+    echo "<span style='color:red;'>No Document</span>";
+}
+?>
+</td>
+
+
+<!-- STATUS -->
+<td>
+<?php
+if($row['approval_status']==0)
+ echo "<span style='color:orange;font-weight:bold;'>Pending</span>";
+elseif($row['approval_status']==1)
+ echo "<span style='color:green;font-weight:bold;'>Approved</span>";
+else
+ echo "<span style='color:red;font-weight:bold;'>Rejected</span>";
+?>
+</td>
+
+
+
+<!-- ACTION -->
+<td>
+<?php if($row['approval_status']==0){ ?>
+<a href="property.php?approve=<?php echo $row['property_id']; ?>" class="btn btn-success btn-sm">Approve</a>
+<a href="property.php?reject=<?php echo $row['property_id']; ?>" class="btn btn-danger btn-sm">Reject</a>
+<?php } else { echo "-"; } ?>
+</td>
+
+<!-- DELETE -->
+<td>
+<a onclick="return confirm('Delete this property?');"
+href="property.php?did=<?php echo $row['property_id']; ?>"
+class="btn btn-danger btn-sm">
+<i class="fas fa-trash"></i>
+</a>
+</td>
+
+</tr>
+
+<?php } ?>
+
+</tbody>
+</table>
+
 </div>
-<!-- /.content-wrapper -->
+</div>
+</section>
+</div>
 
 <?php include('footer.php'); ?>
-<script src="dist/js/sweetalert.js"></script>
-<script>
-  $(document).ready(function() {
-    $(".nav-sidebar a").removeClass("active");
-    $("#property").addClass('active');
-
-    $("#example1").DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "columnDefs": [{ 
-          "targets": [3,7],
-          "orderable": false
-        }]
-    });
-  });
-  function active_deactive(id,val)
-    {
-        
-        $.ajax({
-          
-          url:"ajax-data.php",
-          type:"POST",
-          data : {id : id, val : val},
-
-          success:function(data) {
-            
-              //alert('Status updated.');
-              //window.location.href = 'property.php';
-              //$("#example1").DataTable().ajax.reload();
-              if(val == 0)
-              {
-                var chn_ststus = "<i class='fa fa-toggle-off'  onClick='active_deactive("+id+",1)' style='font-size:40px;'></i>";
-                var chn_state = "Pending";
-                $('#status_change'+id).html(chn_ststus);
-                $('#state_change'+id).html(chn_state);
-
-              }
-              else
-              {
-                var chn_ststus = "<i class='fa fa-toggle-on' onClick='active_deactive("+id+",0)' style='font-size:40px;color:green;'></i>";
-                var chn_state = "Approved";
-                $('#status_change'+id).html(chn_ststus);
-                $('#state_change'+id).html(chn_state);
-              }
-              swal("","update Status successfully.","success");
-              //window.location.href = 'property.php';
-
-              if(val == 4)
-              {
-                var chn_ststus = "<i class='fa fa-toggle-off'  onClick='active_deactive("+id+",3)' style='font-size:40px;'></i>";
-                var chn_state = "Pending";
-                $('#status_change'+id).html(chn_ststus);
-                $('#state_change'+id).html(chn_state);
-
-              }
-              else if(val == 3)
-              {
-                var chn_ststus = "<i class='fa fa-toggle-on' onClick='active_deactive("+id+",4)' style='font-size:40px;color:green;'></i>";
-                var chn_state = "Book For Rent";
-                $('#status_change'+id).html(chn_ststus);
-                $('#state_change'+id).html(chn_state);
-              }
-              swal("","update Status successfully.","success");
-              //window.location.href = 'property.php';
-            }
-          });
-        }
-
-
-</script>

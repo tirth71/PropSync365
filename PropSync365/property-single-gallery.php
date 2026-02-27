@@ -48,9 +48,24 @@ include("header.php");
         <div class="container">
                 <div class="row">
                 <?php 
-                    $id = $_GET['id'];
-                    $q = "SELECT * FROM tbl_property where property_id = $id";
-                    $row = mysqli_query($con,$q);
+                   $id = $_GET['id'];
+
+// only approved property allowed
+$q = "SELECT * FROM tbl_property 
+      WHERE property_id = $id 
+      AND approval_status = 1 
+      AND live_status IN (1,3)";
+
+$row = mysqli_query($con,$q);
+
+if(mysqli_num_rows($row) == 0){
+    echo "<script>
+    alert('This property is not available or not verified by admin.');
+    window.location='properties-list.php';
+    </script>";
+    exit;
+}
+
                     while ($result = mysqli_fetch_assoc($row)) 
                     { ?>
                         <div class="col-xs-12 col-sm-12 col-md-12">

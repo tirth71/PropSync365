@@ -135,6 +135,42 @@ if(@$_SESSION['user_type']==1 && @$_SESSION['email'])
       {
         $deposite=test_input($_POST["deposite"]);
       }
+      /* ================= PROPERTY DOCUMENT VALIDATION ================= */
+
+$doc_name = "";
+
+if(isset($_FILES['property_doc']) && $_FILES['property_doc']['name'] != "")
+{
+    $allowed_ext = array('pdf','jpg','jpeg','png');
+
+    $file_name = $_FILES['property_doc']['name'];
+    $file_tmp  = $_FILES['property_doc']['tmp_name'];
+    $file_size = $_FILES['property_doc']['size'];
+
+    $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+    // check extension
+    if(!in_array($ext,$allowed_ext)){
+        echo "<script>alert('Only PDF, JPG, JPEG, PNG files allowed for property proof');</script>";
+        exit;
+    }
+
+    // max 5MB
+    if($file_size > 5*1024*1024){
+        echo "<script>alert('Document size must be less than 5MB');</script>";
+        exit;
+    }
+
+    // rename file (important security)
+    $doc_name = "DOC_".time().".".$ext;
+
+    move_uploaded_file($file_tmp,"property_docs/".$doc_name);
+}
+else{
+    echo "<script>alert('Property ownership proof is required');</script>";
+    exit;
+}
+
       if(empty($nameErr) && empty($typeErr) && empty($addressErr)&& empty($squarefeetErr) && empty($priceErr) && empty($descriptionErr) && empty($statusErr) && empty($cityErr) && empty($depositeErr) )
         {    
           
@@ -233,15 +269,21 @@ if(@$_SESSION['user_type']==1 && @$_SESSION['email'])
           }
        
       
+$live_status = 0;          // property not active yet
+$approval_status = 0;      // waiting for admin verification
 
-          $live_status=0;
-          $sql="INSERT INTO tbl_property(property_name,property_type,property_address,property_sqfeet,property_price,property_image,property_description,property_totalbeds,property_totalbaths,property_state,property_city,property_status,user_id,live_status,deposite) VALUES ('$property_name','$type','$address','$squarefeet','$price','$images','$description','$totalbeds','$totalbaths','$state','$city','$status','$u_id','$live_status',$deposite)";
-        
+$sql = "INSERT INTO tbl_property
+(property_name,property_type,property_address,property_sqfeet,property_price,property_image,property_document,property_description,property_totalbeds,property_totalbaths,property_state,property_city,property_status,user_id,live_status,deposite,approval_status)
+VALUES
+('$property_name','$type','$address','$squarefeet','$price','$images','$doc_name','$description','$totalbeds','$totalbaths','$state','$city','$status','$u_id','$live_status','$deposite','$approval_status')";
               $res=mysqli_query($con,$sql);
               $result_cnt=mysqli_affected_rows($con);
               if($result_cnt>0)
               {
-                echo "<script>alert('Property added successfuly..!! ');</script>";
+               echo "<script>
+alert('Property submitted successfully. It will be visible after admin verification.');
+window.location='my-properties.php';
+</script>";
               }
               else
               {
@@ -330,11 +372,30 @@ padding-bottom: 100px;">
                 <div class="form-group">
                   <label1 for="property-Image">Property Image</label1></br>
                   <div class="upload--img-area">
-                   <input type="file" name="path[]" id="path" multiple>
+                   <input type="file" name="path[]" id="path" class="form-control" multiple>
                    <!-- <span class="error"><?php echo $ImageErr;?></span> -->
                  </div>
+                 <small style="color:red;">
+      Upload valid Property Images (PDF/JPG/PNG, Max 5MB)
+    </small>
                </div>
              </div>
+
+             <!-- PROPERTY DOCUMENT UPLOAD -->
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="form-group">
+    <label1>Property Ownership Proof (Light Bill / Property Tax / Sale Deed)</label1>
+    <div class="upload--img-area">
+      <input type="file" name="property_doc" class="form-control"
+             accept=".pdf,.jpg,.jpeg,.png" required>
+    </div>
+    <small style="color:red;">
+      Upload valid ownership proof. (PDF/JPG/PNG, Max 5MB)
+    </small>
+  </div>
+</div>
+
+
              <!-- .col-md-12 end -->
              <div class="col-xs-12 col-sm-12 col-md-12">
               <div class="form-group">
