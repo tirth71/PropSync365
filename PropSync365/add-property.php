@@ -313,7 +313,7 @@ padding-bottom: 100px;">
                         <input type="file" name="path[]" id="path" class="form-control" multiple>
                         <!-- <span class="error"><?php echo $ImageErr; ?></span> -->
                       </div>
-                      <small style="color:red;">
+                      <small style="color:black;">
                         Upload valid Property Images (PDF/JPG/PNG, Max 5MB)
                       </small>
                     </div>
@@ -327,7 +327,7 @@ padding-bottom: 100px;">
                         <input type="file" name="property_doc" class="form-control"
                           accept=".pdf,.jpg,.jpeg,.png" required>
                       </div>
-                      <small style="color:red;">
+                      <small style="color:black;">
                         Upload valid ownership proof. (PDF/JPG/PNG, Max 5MB)
                       </small>
                     </div>
