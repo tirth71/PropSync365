@@ -1,5 +1,5 @@
 <footer class="main-footer">
-    <strong> 2024</strong>
+    <strong> 2026</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       Thank You
