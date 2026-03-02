@@ -6,7 +6,7 @@
             <div class="col-xs-12 col-sm-6 col-md-3 widget--about">
                 <div class="widget--content">
                     <div class="footer--logo">
-                        <img src="assets/images/logo/newlogo.png" alt="logo" style="max-width:180px;">
+                        <img src="assets/images/logo/new.png" alt="logo" style="max-width:180px;">
                     </div>
 
                     <h5 style="margin-top:15px;">Head Office</h5>

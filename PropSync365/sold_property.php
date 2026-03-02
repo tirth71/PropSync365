@@ -210,7 +210,4 @@ include("header.php");
     <script src="assets/js/map-addresses.js"></script>
     <script src="assets/js/map-custom.js"></script>
 
-
-
-
     </html>
