@@ -1,169 +1,170 @@
 <?php 
 
-  include('header.php'); 
-  $propertyData = $obj->myQuery("SELECT * FROM `tbl_property` where live_status=3 ");
-  
+include('header.php'); 
 
-  if(isset($_GET['did']))
-  {
-    $data['property_id']=$_GET['did'];
-    // $obj->myDelete('tbl_property',$data);
-    // $obj->redirect('property.php');
-  }
+/* show only rented properties */
+$propertyData = $obj->myQuery("SELECT * FROM tbl_property WHERE live_status=3");
 
 ?>
-<!-- Content Wrapper. Contains page content -->
+
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
+
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Property List</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Property</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+          <h1 class="m-0 text-dark">Rented Property List</h1>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- /.content-header -->
 
-  <!-- Main content -->
-  <section class="content">
-    <div class="card">
-      <!-- <div class="card-header">
-        <a href="property_add.php" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add Property</a>
-      </div> -->
-      <!-- /.card-header -->
-      <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Title</th>
-              <th>User</th>
-              <th>Owner</th>
-              <th>Type</th>
-              <th>Live Status</th>
-              <th>Starting Date</th>
-              <th>Ending Date</th>
-              <th>property Price</th>
-              <th>Deposite</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php 
-              $no=0;
-              while ($row = $propertyData->fetch_assoc()) {
-                $no++;
-                ?>
-                  <tr>
-                    <th><?php echo $no; ?></th>
-                    <td><?php echo $row["property_name"]; ?></td>
-                    <?php
-                      $getUser=$obj->myQuery("SELECT * FROM tbl_user WHERE user_id = '{$row["buyer_id"]}' ");
-                      if($getUser->num_rows > 0){
-    $result = $getUser->fetch_assoc();
-    echo "<td>".$result["user_name"]."</td>";
+<section class="content">
+<div class="card">
+<div class="card-body">
+
+<table id="example1" class="table table-bordered table-striped">
+<thead>
+<tr>
+  <th>No</th>
+  <th>Property</th>
+  <th>Current Tenant</th>
+  <th>Owner</th>
+  <th>Type</th>
+  <th>Status</th>
+  <th>Start Date</th>
+  <th>End Date</th>
+  <th>Price</th>
+  <th>Deposit</th>
+  <th>Total Times Rented</th>
+</tr>
+</thead>
+
+<tbody>
+
+<?php 
+$no=0;
+
+while ($row = $propertyData->fetch_assoc()) {
+$no++;
+?>
+
+<tr>
+
+<td><?php echo $no; ?></td>
+
+<td><?php echo $row["property_name"]; ?></td>
+
+
+<!-- ========== CURRENT TENANT (LATEST RENT) ========== -->
+<?php
+$tenantQuery = $obj->myQuery("
+SELECT u.user_name
+FROM tbl_rent r
+JOIN tbl_user u ON r.user_id = u.user_id
+WHERE r.property_id = '{$row["property_id"]}'
+ORDER BY r.rent_id DESC
+LIMIT 1
+");
+
+if($tenantQuery->num_rows > 0){
+    $tenant = $tenantQuery->fetch_assoc();
+    echo "<td>".$tenant["user_name"]."</td>";
 }else{
-    echo "<td>N/A</td>";
+    echo "<td>No Tenant</td>";
 }
-                    ?>
-                    <?php
-                      $getUser1=$obj->myQuery("SELECT * FROM tbl_user WHERE user_id = '{$row["user_id"]}' ");
-                      
-                      $result = $getUser1->fetch_assoc();
-                    ?>
-                    <td><?php echo $result["user_name"]; ?></td>
+?>
 
-                    <td><?php echo $row["property_type"]; ?></td>
-                    <?php 
-                    $status = $row["property_status"];
-                    if($status == 0){
-                        $sataus1 = "Rent";
-                    }else{
-                        $sataus1 = "Sale";
-                    } ?>
-                    <td><?php echo $sataus1; ?></td>
-                    <?php
-                   $getdate = $obj->myQuery("SELECT * FROM tbl_rent WHERE property_id = '{$row["property_id"]}'");
+
+<!-- ========== OWNER ========== -->
+<?php
+$getOwner=$obj->myQuery("SELECT user_name FROM tbl_user WHERE user_id='{$row["user_id"]}'");
+$owner=$getOwner->fetch_assoc();
+?>
+<td><?php echo $owner["user_name"]; ?></td>
+
+
+<!-- ========== TYPE ========== -->
+<td><?php echo $row["property_type"]; ?></td>
+
+
+<!-- ========== RENT / SALE ========== -->
+<td>
+<?php echo ($row["property_status"]==0)?"Rent":"Sale"; ?>
+</td>
+
+
+<!-- ========== LATEST RENT DATES ========== -->
+<?php
+$getdate = $obj->myQuery("
+SELECT * 
+FROM tbl_rent 
+WHERE property_id = '{$row["property_id"]}'
+ORDER BY rent_id DESC
+LIMIT 1
+");
 
 if($getdate->num_rows > 0){
     $rental = $getdate->fetch_assoc();
-    $start_date = $rental["starting_date"];
-    $end_date   = $rental["ending_date"];
+
+    $start_date = date('d-m-Y', strtotime($rental["starting_date"]));
+    $end_date   = date('d-m-Y', strtotime($rental["ending_date"]));
 }else{
     $start_date = "N/A";
     $end_date   = "N/A";
 }
-                     
-                    ?>
-                    <td><?php echo $start_date; ?></td>
+?>
+
+<td><?php echo $start_date; ?></td>
 <td><?php echo $end_date; ?></td>
 
-                    <td><?php echo $row["property_price"]; ?></td>
-                    <td><?php echo $row["deposite"]; ?></td>
-                    
-                    <th>
-                      <div class="btn-group btn-group-sm">
-                        
-                        <a onclick="return confirm('Are you sure you want to delete Property?');" href="rent-property.php?did=<?php echo $row['property_id']; ?>" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                      </div>
-                    </th>
-                  </tr>
-                <?php
-              }
-             ?>
-          </tbody>
-        </table>
-      </div>
-      <!-- /.card-body -->
-    </div>
-  </section>
-  <!-- /.content -->
+
+<!-- PRICE -->
+<td>₹<?php echo number_format($row["property_price"]); ?></td>
+
+<!-- DEPOSIT -->
+<td>₹<?php echo number_format($row["deposite"]); ?></td>
+
+
+<!-- ========== RENT COUNT (VERY IMPORTANT FEATURE) ========== -->
+<?php
+$countRent = $obj->myQuery("
+SELECT COUNT(*) as total 
+FROM tbl_rent 
+WHERE property_id = '{$row["property_id"]}'
+");
+$c = $countRent->fetch_assoc();
+?>
+<td><b><?php echo $c['total']; ?></b></td>
+
+</tr>
+
+<?php } ?>
+
+</tbody>
+</table>
+
 </div>
-<!-- /.content-wrapper -->
+</div>
+</section>
+</div>
 
 <?php include('footer.php'); ?>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
-  $(document).ready(function() {
-    $(".nav-sidebar a").removeClass("active");
-    $("#rentproperty").addClass('active');
+$(document).ready(function() {
 
-    $("#example1").DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "columnDefs": [{ 
-          "targets": [4,5],
-          "orderable": false
-        }]
-    });
+  $(".nav-sidebar a").removeClass("active");
+  $("#rentproperty").addClass('active');
+
+  $("#example1").DataTable({
+    "paging": true,
+    "lengthChange": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false
   });
-  function active_deactive(id,val)
-    {
-        
-        $.ajax({
-          
-          url:"ajax-data.php",
-          type:"POST",
-          data : {id : id, val : val},
 
-          success:function(data) {
-              swal("", "Update Status Succsessfully.", "success");
-              window.location.href = 'rent-property.php';
-            }
-          });
-        }
-    
-
+});
 </script>
