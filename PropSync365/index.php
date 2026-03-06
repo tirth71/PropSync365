@@ -2,16 +2,77 @@
 <html>
 
 <head>
+    <style>
+        #chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #6665ee;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 9999;
+        }
+
+        #chatbot-box {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 380px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #6665ee;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        #chat-content {
+            height: 350px;
+            overflow-y: auto;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            outline: none;
+        }
+
+        .chat-input button {
+            background: #6665ee;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    </style>
 
 
 </head>
 
 <body>
-<!-- 
+    <!-- 
 <div id="loader">
         <div class="loader"></div>
     </div> -->
-<!-- <div id="loader">
+    <!-- <div id="loader">
     PROPERTY<span id="counter">1</span>
 </div> -->
 
@@ -116,11 +177,11 @@
                                         <?php echo @$err; ?>
                                     </label>
                                 </div>
-                                </div>
-                            </form>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     </section>
     <section class="how-it-work-section">
@@ -228,9 +289,9 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="heading heading-2 text-center">
                                 <h2 class="heading--title" style="color: black;">Latest Properties</h2>
-                                </div>
                             </div>
                         </div>
+                    </div>
                     <div class="row" style="padding-bottom: 20px; padding-top: 0px;">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="carousel carousel-dots" data-slide="3" data-slide-rs="2" data-nav="false" data-dots="true" data-space="25" data-loop="true" data-speed="800">
@@ -282,7 +343,7 @@
                                                         <p1 style="color: #f33408; "> Deposite.
                                                             <?php
                                                             echo moneyFormatIndia($result['deposite']); ?>
-                                                        </p>
+                                                    </p>
 
                                                     </p>
                                                 <?php } else { ?>
@@ -305,7 +366,7 @@
                                                     <li class="m-0"><span class="feature"><img src="assets/images/favicon/squre.png" alt=""></span><span class="feature-num">
                                                             <?php echo $result['property_sqfeet']; ?> sq
                                                         </span></li>
-                                                    </ul>
+                                                </ul>
 
                                                 <div class="buy-view-card-btn">
 
@@ -324,10 +385,15 @@
                                                         <a href="property-single-gallery.php?id=<?php echo $result['property_id']; ?>">view</a>
                                                     </li>
                                                 </div>
-                                            </div> </div>
+                                            </div>
+                                        </div>
                                     </div> <?php } ?>
-                            </div> </div></div> </div>
-            </div> </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     <?php } ?>
 
     <?php
@@ -336,39 +402,123 @@
         $explrestunits = "";
         if (strlen($num) > 3) {
             $lastthree = substr($num, strlen($num) - 3, strlen($num));
-                $restunits = substr($num, 0, strlen($num) - 3); // extracts the last three digits
-                $restunits = (strlen($restunits) % 2 == 1) ? "0" . $restunits : $restunits; // explodes the remaining digits in 2's formats, adds a zero in the beginning to maintain the 2's grouping.
-                $expunit = str_split($restunits, 2);
-                for ($i = 0; $i < sizeof($expunit); $i++) {
-                    // creates each of the 2's group and adds a comma to the end
-                    if ($i == 0) {
-                        $explrestunits .= (int) $expunit[$i] . ","; // if is first value , convert into integer
-                    } else {
-                        $explrestunits .= $expunit[$i] . ",";
-                    }
+            $restunits = substr($num, 0, strlen($num) - 3); // extracts the last three digits
+            $restunits = (strlen($restunits) % 2 == 1) ? "0" . $restunits : $restunits; // explodes the remaining digits in 2's formats, adds a zero in the beginning to maintain the 2's grouping.
+            $expunit = str_split($restunits, 2);
+            for ($i = 0; $i < sizeof($expunit); $i++) {
+                // creates each of the 2's group and adds a comma to the end
+                if ($i == 0) {
+                    $explrestunits .= (int) $expunit[$i] . ","; // if is first value , convert into integer
+                } else {
+                    $explrestunits .= $expunit[$i] . ",";
                 }
-                $thecash = $explrestunits . $lastthree;
-            } else {
-                $thecash = $num;
             }
-            return $thecash; // writes the final format where $currency is the currency symbol.
+            $thecash = $explrestunits . $lastthree;
+        } else {
+            $thecash = $num;
         }
-        ?>
-        <!-- #properties-carousel  end  -->
+        return $thecash; // writes the final format where $currency is the currency symbol.
+    }
+    ?>
+    <!-- #properties-carousel  end  -->
 
-        <?php include("footer.php"); ?>
+    <?php include("footer.php"); ?>
 
-        <!-- Footer Scripts
+    <div id="chatbot-icon" onclick="toggleChat()">
+        💬
+    </div>
+
+    <div id="chatbot-box">
+        <div class="chat-header">
+            PropSync365 Assistant
+            <span onclick="toggleChat()" style="float:right;cursor:pointer;">✖</span>
+        </div>
+
+        <div id="chat-content">
+            <p><b>Bot:</b> Hi 👋 Welcome to PropSync365! How can I help you?</p>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Ask about rent, buy, location..." onkeypress="handleKey(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- ================= CHATBOT SCRIPT ================= -->
+
+    <script>
+        function toggleChat() {
+            var box = document.getElementById("chatbot-box");
+            box.style.display = box.style.display === "block" ? "none" : "block";
+        }
+
+        function handleKey(e) {
+            if (e.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            let input = document.getElementById("user-input");
+            let message = input.value.trim();
+
+            if (message === "") return;
+
+            let chat = document.getElementById("chat-content");
+
+            chat.innerHTML += "<p><b>You:</b> " + message + "</p>";
+
+            let response = getBotResponse(message.toLowerCase());
+
+            setTimeout(() => {
+                chat.innerHTML += "<p><b>Bot:</b> " + response + "</p>";
+                chat.scrollTop = chat.scrollHeight;
+            }, 500);
+
+            input.value = "";
+        }
+
+        function getBotResponse(msg) {
+
+            if (msg.includes("rent")) {
+                return "You can search rental properties using the search filter above. Select status as 'Rent'.";
+            }
+
+            if (msg.includes("buy") || msg.includes("sale")) {
+                return "To buy property, click on the Buy button in Latest Properties section.";
+            }
+
+            if (msg.includes("location") || msg.includes("city")) {
+                return "Please enter your preferred city in the location search box.";
+            }
+
+            if (msg.includes("price") || msg.includes("cost")) {
+                return "Property prices vary based on city and type. Please use search filters to check pricing.";
+            }
+
+            if (msg.includes("contact")) {
+                return "You can contact us via the Contact page available in the header menu.";
+            }
+
+            if (msg.includes("hello") || msg.includes("hi")) {
+                return "Hello 😊 How can I help you with properties today?";
+            }
+
+            return "Sorry, I didn't understand that. You can ask about Rent, Buy, Location, Price, or Contact.";
+        }
+    </script>
+
+    <!-- Footer Scripts
 ============================================= -->
-        <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-        <script src="assets/js/jquery-2.2.4.min.js"></script>
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/functions.js"></script>
-        <script>
-    
-</script>
+    <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="assets/js/jquery-2.2.4.min.js"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/functions.js"></script>
+    <script>
 
-</script>
+    </script>
+
+    </script>
 
 </body>
 
