@@ -240,7 +240,7 @@
                                            // print_r($temp[0]);
                                           $temp = array_filter($temp);
                                           foreach($temp as $image){
-                                              $images[]="http://localhost/propsync365/PropSync365/img_upload/".$image;                                          
+                                              $images[]="http://localhost/PropSync365/img_upload/".$image;                                          
                                           }  
                                           if(@$images)
                                           {
