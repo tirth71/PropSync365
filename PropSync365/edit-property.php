@@ -84,7 +84,8 @@
             { 
               $fileName="";
               $fileName.=date('Y-m-d-h-i-s')."-{$i}.{$ext}";
-              $uploadPath=$serverPath."http://localhost/PropSync365/img_upload/".$fileName;
+              // $uploadPath=$serverPath."http://localhost/PropSync365/img_upload/".$fileName;
+              $uploadPath = $serverPath."/img_upload/".$fileName;
 
               move_uploaded_file($_FILES['path']['tmp_name'][$i],$uploadPath);
 
@@ -171,7 +172,7 @@
                             $row = mysqli_query($con,$q);
                             while ($result = mysqli_fetch_assoc($row)) {?>
 
-          <form class="mb-0" method="post" action="<?php echo htmlspecialchars($_SERVER[" PHP_SELF"]);?>"
+          <form class="mb-0" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
             enctype='multipart/form-data'>
             <div class="page-title bg-overlay bg-overlay-dark2">
               <div class="form-box1">
@@ -239,14 +240,12 @@
                                            // print_r($temp[0]);
                                           $temp = array_filter($temp);
                                           foreach($temp as $image){
-                                              $images[]="http://localhost/PropSync365/img_upload//".trim( str_replace( array('[',']') ,"" ,$image ) );
+                                              $images[]="http://localhost/propsync365/PropSync365/img_upload/".$image;                                          
                                           }  
                                           if(@$images)
                                           {
                                           foreach($images as $image){
-                                            if(is_file($image)){
-                                                $img=  "<img src='{$image}' style='height:85px !important; width:85px !important;' class='img-fluid mb-2'/>";
-                                              }
+                                            $img = "<img src='{$image}' style='height:85px !important; width:85px !important;' class='img-fluid mb-2'/>";
 
                                               ?>
 

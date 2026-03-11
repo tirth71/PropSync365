@@ -153,7 +153,7 @@ if (@$_SESSION['user_type'] == 1 && @$_SESSION['email']) {
       $status = $_REQUEST['status'];
       $deposite = $_REQUEST['deposite'];
 
-      $serverPath = $_SERVER["DOCUMENT_ROOT"] . "/property365";
+      $serverPath = $_SERVER["DOCUMENT_ROOT"] . "/PropSync365";
       if (!empty($_FILES['path']['name'])) {
         $totalFiles = count($_FILES['path']['name']);
 
