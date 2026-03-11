@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
                     $q = "SELECT * FROM tbl_property 
       WHERE property_id = $id 
       AND approval_status = 1 
-      AND live_status IN (1,3)";
+      AND live_status IN (0)";
 
                     $row = mysqli_query($con, $q);
 
