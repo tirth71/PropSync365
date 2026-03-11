@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
     $id = 1;
 }
 
-$query = "SELECT * FROM `tbl_property` WHERE `live_status` IN (1,3) AND `approval_status` = 1";
+$query = "SELECT * FROM `tbl_property` WHERE `approval_status` = 1";
 
 $type = "";
 $status = "";
