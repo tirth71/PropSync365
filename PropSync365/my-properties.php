@@ -19,7 +19,7 @@ if (@$_SESSION['user_type'] == 1 && @$_SESSION['email']) {
     $result1 = mysqli_fetch_assoc($row1);
     $user_id = $result1['user_id'];
 
-    $query = "SELECT * FROM tbl_property Where user_id='$user_id' AND live_status=1";
+    $query = "SELECT * FROM tbl_property Where user_id='$user_id' AND approval_status=1";
 
     $query_l = " LIMIT " . $start . ", " . $limit;
 

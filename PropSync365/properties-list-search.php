@@ -203,7 +203,7 @@ padding-bottom: 0px;">
                                                 <?php $str = $result['property_image'];
                                                 $temp = explode(',', $result['property_image']);
                                                 ?>
-                                                <img src="http://localhost/PropSync365/img_upload/<?php echo $temp[0]; ?>" alt="property image"
+                                                <img src="http://localhost:8081/PropSync365/img_upload/<?php echo $temp[0]; ?>" alt="property image"
                                                     class="img-responsive" style="max-width: 102%;">
                                             </a>
                                             <?php $q = $result['property_status'];

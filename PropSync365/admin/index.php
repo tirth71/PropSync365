@@ -3,7 +3,7 @@ include('header.php');
 $user_query = $obj->myQuery("SELECT count(user_id) as id FROM `tbl_user`");
 $user_count = $user_query->fetch_assoc();
 
-$property_query = $obj->myQuery("SELECT count(property_id) as id FROM `tbl_property`where live_status in (1,3)");
+$property_query = $obj->myQuery("SELECT count(property_id) as id FROM `tbl_property`where live_status in (0,1,2,3)");
 $property_count = $property_query->fetch_assoc();
 
 $transaction_query = $obj->myQuery("SELECT count(payment_id) as id FROM `tbl_payment`");
